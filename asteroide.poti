@@ -1,0 +1,14 @@
+use "jerimum"
+
+tipo Asteroide
+  cor = Cor.BRANCO
+  x = aleatório(jogo.largura - 76)
+  y = aleatório(jogo.altura - 200)
+  imagens = Imagem("asteroides.png").fatie(80, 76)
+
+  desenhe()
+    n = (Relógio.milisegundos div 100) mod imagens.tamanho + 1
+    img = imagens[n]
+    img.desenhe_centralizado(x, y, 1, 0)
+  fim
+fim

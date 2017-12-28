@@ -1,0 +1,41 @@
+use "jerimum"
+
+tipo Jogador
+ var x, y: Real
+  imagem = Imagem("Nave.png")
+   var placar := 0
+
+  cate_asteroides(asteroides: Lista[Asteroide])
+    n = asteroides.tamanho
+    asteroides_catadas = asteroides.selecione(
+      Asteroide => Jogo.distância(x, y, Asteroide.x, Asteroide.y) > 75
+    )
+    placar := placar + (n - asteroides_catadas.tamanho) * 10
+    asteroides_catadas
+  fim
+
+  desenhe()
+  	imagem.desenhe(x, y, 3)
+fim
+
+mover_direita()
+	x := x + 10
+	se x > jogo.largura - 220 então
+  		x := jogo.largura -220
+	fim
+fim
+mover_esquerda()
+	x := x - 10
+	se x < 10 então x:= 10 fim
+fim
+mover_cima()
+	y:= y - 10
+se y < 10 então y:= 10 fim
+fim
+mover_baixo()
+	y:= y + 10
+  se y > jogo.altura - 280 então
+  	y := jogo.altura -280
+		fim
+	fim
+fim

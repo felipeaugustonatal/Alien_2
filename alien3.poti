@@ -1,0 +1,80 @@
+use "jerimum"
+use "jogador.poti" 
+use "asteroide.poti"
+
+INICIO, JOGANDO = 1, 2
+var estado := INICIO
+
+#graficos
+fundo = Imagem("Bg.png")
+chao_imagem = Imagem("chao_batalha.png")
+nave = Jogador(jogo.largura/2, jogo.altura/2)
+var asteroides := Lista(0, Asteroide())
+fonte = Fonte(16)
+
+atualize()
+  escolha estado
+    caso INICIO  => atualize_inicio
+    caso JOGANDO => atualize_jogando
+  fim
+fim
+
+desenhe()
+  fundo.desenhe(0, 0, 0)
+  escolha estado
+    caso INICIO  => desenhe_inicio
+    caso JOGANDO => desenhe_jogando
+  fim
+fim
+
+# Estado Inicio
+atualize_inicio()
+  se Teclado.TECLA_S então
+    estado := JOGANDO
+  fim
+fim
+
+desenhe_inicio()
+  msg = "PRESSIONE [S] PARA COMECAR"
+  a = jogo.largura / 2
+  b = jogo.altura / 2
+  fonte.desenhe_centralizado(msg, a, b, 3, Cor.AMARELO)
+fim
+
+#jogando
+atualize_jogando()
+  asteroides := nave.cate_asteroides(asteroides)
+  se asteroides.tamanho < 25 e aleatório(100) < 4 então
+    asteroides := Asteroide() :: asteroides
+  fim
+se Teclado.TECLA_PARA_DIREITA então
+  nave.mover_direita
+fim
+se Teclado.TECLA_PARA_ESQUERDA então
+  nave.mover_esquerda
+  fim
+  se Teclado.TECLA_PARA_CIMA então
+    nave.mover_cima
+  fim
+  se Teclado.TECLA_PARA_BAIXO então
+    nave.mover_baixo
+  fim
+  se Teclado.TECLA_R então
+    asteroides := Lista(0, Asteroide())
+    estado := INICIO
+    nave.placar := 0
+  fim
+fim
+
+#tela
+desenhe_jogando()
+fundo.desenhe(0, 0, 0)
+chao_imagem.desenhe(0,480,2)
+nave.desenhe
+ para Asteroide em asteroides faça
+    Asteroide.desenhe
+    fonte.desenhe("Placar: {nave.placar}", 10, 20, 3, Cor.AMARELO)
+    fim
+fim
+
+jogo.iniciar("alien_game2",840, 680, atualize, desenhe)
